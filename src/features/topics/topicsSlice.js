@@ -18,3 +18,5 @@ const options = {
         }
     }
 }
+
+export const selectTopics = state => state.topics.topics; 
