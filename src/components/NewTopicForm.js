@@ -4,18 +4,29 @@ import { v4 as uuidv4 } from "uuid";
 import ROUTES from "../app/routes";
 import { ALL_ICONS } from "../data/icons";
 
+import { useDispatch } from 'react-redux';
+import { addTopic } from '../features/topics/topicsSlice'; // action creators from topicsSlice.js
+
 export default function NewTopicForm() {
   const [name, setName] = useState("");
   const [icon, setIcon] = useState("");
   const history = useHistory();
 
+  const dispatch = useDispatch(); //hooks only in react components or custom hooks! not any function.
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name.length === 0) {
       return;
     }
-
+    
     // dispatch your add topic action here
+    const payload = { // create a payload for action creator addTopic.
+      id:uuidv4(),
+      name: name, 
+      icon: icon,
+    }
+
+    dispatch(addTopic(payload));
     history.push(ROUTES.topicsRoute());
   };
 
