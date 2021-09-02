@@ -8,12 +8,12 @@ const options = {
     },
     reducers:{
         addQuiz:(state, action)=>{
-            const {id, name, topicId} = action.payload; 
+            const {id, name, topicId, cardIds} = action.payload; 
             const quiz = {
                 id:id,
                 name:name,
                 topicId:topicId,
-                cardIds:[], // associate cards with quiz, initialise with empty array. 
+                cardIds:cardIds, // associate cards with quiz, 
             }
             state.quizzes[id] = quiz;
         }
