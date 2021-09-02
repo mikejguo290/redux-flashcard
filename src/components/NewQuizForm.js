@@ -4,8 +4,10 @@ import { v4 as uuidv4 } from "uuid";
 import ROUTES from "../app/routes";
 
 import { useSelector, useDispatch } from 'react-redux'; 
+
 import { selectTopics } from '../features/topics/topicsSlice'; 
 import { addQuizAndTopicId } from '../features/quizzes/quizzesSlice';
+import { addCard } from '../features/cards/cardsSlice';
 
 export default function NewQuizForm() {
   const [name, setName] = useState("");
@@ -25,20 +27,36 @@ export default function NewQuizForm() {
     const cardIds = [];
 
     // create the new cards here and add each card's id to cardIds
+    // 
+    // Q. where does cards state come from? 
+    // A. This component allows you to add,modify and remove cards. 
+    // Q. why isn't it just cards.cards from the store? 
+    // A. This component's state relates to cards for just the quiz being created, rather than all cards.
+
+    cards.forEach(card => { // dispatch cards in state to store. 
+      const id = uuidv4();
+      dispatch(addCard({
+        id:id,
+        front:card.front,
+        back:card.back,
+        }))
+      cardIds.push(id);  // also fill cardIds array so it can be used for quiz payload of newly created quiz. 
+      }) 
+
     // create the new quiz here
-    const payload = {
+    const quizPayload = {
       id:uuidv4(),
       name:name,
       topicId:topicId,
       cardIds:cardIds,
     }
 
-    dispatch(addQuizAndTopicId(payload));
+    dispatch(addQuizAndTopicId(quizPayload));
 
     history.push(ROUTES.quizzesRoute());
   };
 
-  const addCardInputs = (e) => {
+  const addCardInputs = (e) => { // add card by concating a card obj with blanks for front side and back. 
     e.preventDefault();
     setCards(cards.concat({ front: "", back: "" }));
   };
@@ -48,7 +66,7 @@ export default function NewQuizForm() {
     setCards(cards.filter((card, i) => index !== i));
   };
 
-  const updateCardState = (index, side, value) => {
+  const updateCardState = (index, side, value) => { // update selected card.front/back with input value.
     const newCards = cards.slice();
     newCards[index][side] = value;
     setCards(newCards);
