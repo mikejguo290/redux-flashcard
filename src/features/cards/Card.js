@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { selectCards } from './cardsSlice';
 
 export default function Card({ id }) {
-  const cards = {}; // replace this with a call to your selector to get all the cards in state
+  const cards = useSelector(selectCards); // replace {} with a call to your selector to get all the cards in state
   const card = cards[id];
-  const [flipped, setFlipped] = useState(false);
+  const [flipped, setFlipped] = useState(false); 
+  // card has state of flipped which can be modified by clicking on it.
+  // flipped is used to determine whether card.front is show or not.
 
   return (
     <li>
