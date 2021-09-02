@@ -7,7 +7,7 @@ import { selectQuizzes } from './quizzesSlice';
 
 export default function Topic() {
   const quizzes = useSelector(selectQuizzes); // replace {} with a call to your selector to get all the quizzes in state
-  let { quizId } = useParams();
+  let { quizId } = useParams(); // react-router method to grab param quizId from url. save it to var.
   const quiz = quizzes[quizId];
 
   return (
